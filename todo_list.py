@@ -97,13 +97,16 @@ def main():
                 del tasks[pakya]            
             
                         
-        elif choice == 3:
+        elif choice == 3:  # edit a task
             
             task_num = 0
             
-            for task in tasks:
+            temp = []
+            
+            for title,task in tasks.items():
                 task_num += 1
-                print(f"{task_num}.{task}")
+                temp.append(task)
+                print(f"{task_num}.{title} - {task}") # display the to do list with a numeric points
             
             task_num = 0
             
@@ -113,15 +116,43 @@ def main():
                 print("Not a valid input")
             else:
                 index = int(index)
-                print(tasks[index-1])
-                edit = input("Enter the new edited task you want to add : ")
-                tasks[index-1] = edit
+                print("--------------------------------------------------")
+                for key,value in tasks.items():
+                    
+                    if temp[index-1] == value:
+                        print(f"Title     : {key}")
+                        print(f"List item : {value}")
+                        print("--------------------------------------------------------------")
+                        edit_choice = input("do you want to edit the title or the List item (T/L): ").capitalize()
+                        print("--------------------------------------------------------------")
+                        
+                        if edit_choice == "T":
+                            edited_title = input("Enter your new title: ")
+                            if len(edited_title) != 0:
+                                tasks[edited_title] = tasks[key]
+                                del tasks[key]
+                                break
+                            else:
+                                print("Please Enter your text")
+                            
+                        elif edit_choice == "L":
+                            edited_li = input("Enter the new list item you want to add: ")
+                            if len(edit_choice) != 0:
+                                tasks[key] = edited_li
+                                break
+                            else:
+                                print("Please Enter your text")
+                        else:
+                            print("Invalid Input")
                 
-                print("your edited list is - ")
                 
-                for task in tasks:
+                
+                
+                    
+                for title,task in tasks.items():
                     task_num += 1
-                    print(f"{task_num}.{task}")
+                    temp.append(task)
+                    print(f"{task_num}.{title} - {task}") # display the to do list with a numeric points
                     
         elif choice == 4:
             task_num = 0
