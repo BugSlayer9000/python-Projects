@@ -23,9 +23,7 @@ def taskView():
 
 
 
-tasks = {"Python1":"To do list improvement",
-         "Python":"Object oriantaed Programing",
-         "Work":"From 5 to 7.30"}
+tasks = {}
 
 print("--------------------------------------------------")
 print("This is a to do list program")
