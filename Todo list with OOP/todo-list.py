@@ -1,3 +1,5 @@
+# samod subhasha
+# 30/04/25
 # this is the same to do list app but with a bit advanced tecniques like OOP 
 
 # this content is genarated by Chat gpt and Adding the comments to work and understand how it works 
