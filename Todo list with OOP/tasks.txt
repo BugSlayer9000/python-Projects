@@ -1,0 +1,4 @@
+college|Python and js
+gym|backday
+Drink |a monster 
+study |python and java

@@ -31,23 +31,32 @@ class todoList:
         
             
     
-    def editTask(self,taskNum,newTitle,newDescription):
-        if 0 <= taskNum< len(self.tasks):
+    def editTask(self,taskNum,newTitle=None,newDescription=None):
+        if 0 <= taskNum < len(self.tasks): # check if the chooses number is above or equal to 0 and below the num of tasks
             if newTitle:
                 (self.tasks[taskNum].title) = newTitle
             if newDescription:
                 (self.tasks[taskNum].description) = newDescription
     
     def saveToFiles(self,filename):
-        pass
+        with open(filename, "w") as f:
+            for task in self.tasks:
+                f.write(f"{task.title}|{task.description}\n")
     
     def loadFromFile(self,filename):
-        pass
+        try:
+            with open(filename,"r") as f:
+                self.tasks = []
+                for line in f:
+                    title,description = line.strip().split("|")
+                    self.tasks.append(Task(title,description))
+        except FileNotFoundError:
+            print("No saved tasks found")
 
 def numCheck(choice):
     if choice.isdigit():
         choice =  int(choice)
-        if choice < 5:
+        if choice <= 5:
             return choice
         else:
             print("input Invalid")
@@ -58,6 +67,7 @@ def numCheck(choice):
     
 def main():
     todo = todoList()
+    todo.loadFromFile("Todo list with OOP//tasks.txt")
     
     while True:
         print("\n1.Add Tasks")
@@ -103,11 +113,16 @@ def main():
             
             taskNum = int(taskNum)-1
             
-            todo.editTask(taskNum,newTitle,newDescription) # passing the values
-            
+            todo.editTask(taskNum ,newTitle if newTitle else None, newDescription if newDescription else None) 
+            # passing the values and the short if loop means that If the user enters an Empty value it will pass it as none and
+            # the last value will be stored 
 
-        elif choice == 5:
+        elif choice == 5: # Save and Exit
             print("you choose choice 5")
+            todo.saveToFiles("Todo list with OOP//tasks.txt")
+            print("task Saved. \n Good bye")
+        
+            
         
         
     
