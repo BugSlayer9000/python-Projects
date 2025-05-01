@@ -48,17 +48,14 @@ class FlashCard:
     def __init__(self):
         self.flashcardDic = {}
         
-    def addStuff(self,topic = None,questions = None):
-        for keys in self.flashcardDic.keys():
-            if topic in keys:
-                self.flashcardDic.setdefault(topic,[]).append(questions)
-            
-            
+    def addstuff(self, topic, questlist): # Get the topic from the input 
+        self.flashcardDic[topic] = questlist
         
-        
+    def readQuiz(self, index): # choice 2 reads the dic and passes the data
+        return self.flashcardDic.get(index)
     
-    
-    
+            
+ 
 
 class Security:
     def __init__(self):
@@ -74,6 +71,10 @@ class Security:
             print("Input Not valid")
     
 def main():
+    flashcard = FlashCard() # added the instance 
+    
+    lock = Security() 
+    
     is_running = True
     
     questionlist = []
@@ -92,33 +93,73 @@ def main():
         
         checked_Num = Security().numcheck(Choice) 
         
-        if checked_Num > 5:
-            print("Enter a number Below 4.")
+        try:
+            if checked_Num > 5: # further input choice check and see if it's less than the num of choices 
+                print("Enter a number Below 4.")
+                continue
+        except TypeError:
+            print("Only numbers are valid")
             continue
         
-        if checked_Num == 1:
+        # when you put and interger as a 
+        
+        if checked_Num == 1: # adding the topics and questions
             
-            Choice1 = True  # to run the while loop
             topic = input("Enter the topic you want to add :")  #gets the topic 
             
-            while Choice1:
+            while True:
                 print("\nPress enter to quit.")
-                question = input("Enter the question you want to add \n New question :  ") 
+                question = input("Enter the question you want to add \nNew question :  ") 
                 if question == "":
+                    if questionlist == []: # check if the list is empty before passing the topic to the function
+                        print("\nYour topic can't be saved \nReason - No questions under the topic")
+                        continue 
+                    else:
+                        flashcard.addstuff(topic,questionlist)
+                        print(f"Questions saved successfully under the Topic - '{topic}'")
+                        questionlist.clear() # Clear the list for repeatable use 
                     break
                 else:
-                    questionlist.append(question)
+                    questionlist.append(question) 
             
-            # need to get the topic and the list of questions to add to the flashcard dic
+        elif checked_Num == 2: # look at questions
             
-            for question in questionlist:
-                FlashCard.addStuff(topic,question)
+            numList = [] # list to store numbers from the loop
+            
+            topicList = []
+            
+            print("------------------------------------")
+            for i , topic in enumerate(flashcard.flashcardDic.keys(),1):
+                print(f"{i}. {topic} ") # show the user a list of available topics 
+                numList.append(i) # adding the numbers to the list for input cheks
+                topicList.append(topic) # adding the topics to a list to pass the right topic to get the questions
+            print("------------------------------------")
+            
+            topicChoice = input("\nEnter the Number of topic you want to open : ")
+            
+            topicChoiceChecked = lock.numcheck(topicChoice) # chekced and turned into an int
+            
+            if topicChoiceChecked not in numList: # further input check 
+                print("\nEnter a Valid number")
+            else:
+                topicChoiceChecked -= 1 # to get the index from the list of topics 
+            
+            # need to acess the dic and get the questions based on the input number 
+            
+            print(f"This is the choosen Topic - {topicList[topicChoiceChecked]}")
+            
+            # pass the topic to the function to get the questions
+            
+            questions_fromDic = flashcard.readQuiz(topicList[topicChoiceChecked])
+            print("--------------------------------------------------------------")
+            print(f"\nThis is the questions under the topic of {topicList[topicChoiceChecked]}")
+            print(questions_fromDic)
+            print("--------------------------------------------------------------")
+                
             
             
             
-                    
-        elif checked_Num == 2:
-            pass
+                
         elif checked_Num == 3:
             pass
         elif checked_Num == 4:
