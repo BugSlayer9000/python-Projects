@@ -46,13 +46,20 @@
 
 class FlashCard:
     def __init__(self):
-        self.flashcardDic = {}
+        self.flashcardDic = {
+    "Science": ["What is an atom?", "Define life"],
+    "Math": ["What is 2+2?", "Define a prime number"]
+    }  # examples to work with
         
     def addstuff(self, topic, questlist): # Get the topic from the input 
         self.flashcardDic[topic] = questlist
         
     def readQuiz(self, index): # choice 2 reads the dic and passes the data
-        return self.flashcardDic.get(index)
+        questions = []
+        for i,quiz in enumerate(self.flashcardDic[index],1):
+            questions.append(f"{i}. {quiz}")
+        return questions
+            
     
             
  
@@ -126,7 +133,7 @@ def main():
             
             numList = [] # list to store numbers from the loop
             
-            topicList = []
+            topicList = [] # store the topics to pass in the topic based on the input
             
             print("------------------------------------")
             for i , topic in enumerate(flashcard.flashcardDic.keys(),1):
@@ -134,7 +141,8 @@ def main():
                 numList.append(i) # adding the numbers to the list for input cheks
                 topicList.append(topic) # adding the topics to a list to pass the right topic to get the questions
             print("------------------------------------")
-            
+            print(topicList) # to check if the liists work
+            print(numList)
             topicChoice = input("\nEnter the Number of topic you want to open : ")
             
             topicChoiceChecked = lock.numcheck(topicChoice) # chekced and turned into an int
@@ -146,14 +154,17 @@ def main():
             
             # need to acess the dic and get the questions based on the input number 
             
-            print(f"This is the choosen Topic - {topicList[topicChoiceChecked]}")
-            
             # pass the topic to the function to get the questions
             
-            questions_fromDic = flashcard.readQuiz(topicList[topicChoiceChecked])
+            selectedTopic = topicList[topicChoiceChecked]
+            
+            questions_fromDic = flashcard.readQuiz(selectedTopic) 
+            
             print("--------------------------------------------------------------")
             print(f"\nThis is the questions under the topic of {topicList[topicChoiceChecked]}")
-            print(questions_fromDic)
+            for quiz in questions_fromDic:
+                print(quiz)
+            
             print("--------------------------------------------------------------")
                 
             
