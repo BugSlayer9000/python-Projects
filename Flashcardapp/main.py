@@ -44,11 +44,13 @@
 # flashcard = {"Science":["what is an atom",
 #                         "Define life"]}   # Example of how the topic and questions should be 
 
+import random 
+
 class FlashCard:
     def __init__(self):
         self.flashcardDic = {
     "Science": ["What is an atom?", "Define life"],
-    "Math": ["What is 2+2?", "Define a prime number"]
+    "Math": ["What is 2+2?", "Define a prime number","pakaya","ponny","kariya","huththto"]
     }  # examples to work with
         
     def addstuff(self, topic, questlist): # Get the topic from the input 
@@ -59,6 +61,25 @@ class FlashCard:
         for i,quiz in enumerate(self.flashcardDic[index],1):
             questions.append(f"{i}. {quiz}")
         return questions
+    
+    def randomquiz(self,index):
+        ranqizes = []
+        # topic passed as index 
+        
+        for quiz in self.flashcardDic[index]:
+            ranqizes.append(quiz)
+        
+        
+        
+        for item in ranqizes:
+            ran = random.randint(0,len(ranqizes))
+            return ranqizes[ran]
+        
+        
+        
+        
+        
+            
             
     
             
@@ -167,11 +188,55 @@ def main():
             
             print("--------------------------------------------------------------")
                 
+            numList.clear()
+            topicList.clear() # clear the lists for reuse 
             
             
             
                 
-        elif checked_Num == 3:
+        elif checked_Num == 3: # Random questions
+            
+            numList = [] # list to store numbers from the loop
+            
+            topicList = [] # store the topics to pass in the topic based on the input
+            
+            print("-------------------------------------")
+            print("Random question Picker")
+            print()
+            for i , topic in enumerate(flashcard.flashcardDic.keys(),1):
+                print(f"\n{i}. {topic}")
+                numList.append(i) 
+                topicList.append(topic)
+            print("")
+            print(numList)
+            print(topicList)
+            
+            ranChoice = input("Enter the number of the topic - ")
+            
+            ranChoiceChecked = lock.numcheck(ranChoice)
+            
+            if ranChoiceChecked not in numList:
+                print("\nEnter a number in the topic")
+            else:
+                ranChoiceChecked -= 1
+                
+            choosenTopic = topicList[ranChoiceChecked]
+            
+            print(f"\nyou choose topic `{choosenTopic}`")      
+            
+               
+            ranquiz = flashcard.randomquiz(choosenTopic)
+            
+            print(f"\nthis is the list {ranquiz} ")
+            
+            
+            
+               
+            
+            
+            
+                
+            
             pass
         elif checked_Num == 4:
             pass
