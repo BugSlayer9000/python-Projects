@@ -63,26 +63,27 @@ class FlashCard:
         return questions
     
     def randomquiz(self,index):
+        
         ranqizes = []
         # topic passed as index 
         
-        for quiz in self.flashcardDic[index]:
+        ranqizesV2 = []
+        
+        for quiz in self.flashcardDic[index]: # get the questions under the passed topic to function
             ranqizes.append(quiz)
         
+        # get the legnth from the eanquiz 
+        # how to get a randomized output from the ranquiz 
         
+        lenRanquiz = len(ranqizes) # get how many items that's in the question list 
         
-        for item in ranqizes:
-            ran = random.randint(0,len(ranqizes))
-            return ranqizes[ran]
+        ran = random.sample(range(0,lenRanquiz),lenRanquiz) # Trying to genarate a random numer list without repeats
         
-        
-        
-        
-        
+        for ranNum in ran:
+            ranqizesV2.append(ranqizes[ranNum]) # for evry number in the list of ran get the each question for the index and append it a new list according to the new order
             
-            
-    
-            
+        
+        return ranqizesV2
  
 
 class Security:
@@ -107,8 +108,10 @@ def main():
     
     questionlist = []
     
+    print("This is a Flashcard program \nRead the Options below and type your choice ") # main choices 
+    
     while is_running:
-        print("This is a Flashcard program \nRead the Options below and type your choice ") # main choices 
+        
         print("------------------------------------------")
         print("1 -- Start a new topic")
         print("2 -- Look at questions")     # 2 sub choices 
@@ -190,10 +193,7 @@ def main():
                 
             numList.clear()
             topicList.clear() # clear the lists for reuse 
-            
-            
-            
-                
+               
         elif checked_Num == 3: # Random questions
             
             numList = [] # list to store numbers from the loop
@@ -220,24 +220,15 @@ def main():
             else:
                 ranChoiceChecked -= 1
                 
-            choosenTopic = topicList[ranChoiceChecked]
-            
-            print(f"\nyou choose topic `{choosenTopic}`")      
-            
+            choosenTopic = topicList[ranChoiceChecked] 
                
             ranquiz = flashcard.randomquiz(choosenTopic)
             
-            print(f"\nthis is the list {ranquiz} ")
-            
-            
-            
-               
-            
-            
-            
+            print(f"\nRandomized questions of {choosenTopic}")
+          
+            for i,quiz in enumerate(ranquiz,1):
+                print(f"{i}. {quiz}")
                 
-            
-            pass
         elif checked_Num == 4:
             pass
         elif checked_Num == 5:
