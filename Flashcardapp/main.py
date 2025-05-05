@@ -51,7 +51,8 @@ class FlashCard:
         self.flashcardDic = {
     "Science": ["What is an atom?", "Define life"],
     "Math": ["What is 2+2?", "Define a prime number","pakaya","ponny","kariya","huththto"]
-    }  # examples to work with
+    }  # examples to work with#
+        self.questions = []
         
     def addstuff(self, topic, questlist): # Get the topic from the input 
         self.flashcardDic[topic] = questlist
@@ -93,7 +94,13 @@ class FlashCard:
         del self.flashcardDic[index]
         
         return f"Topic `{index}` deleted succesfully."
-        
+    
+    def delChoice(self,index):
+        for _ in self.flashcardDic[index]:
+                self.questions.append(_)
+                
+        return self.questions
+   
 class LoginData:
     def __init__(self):
         self.userData = {"samod":"samod1"}
@@ -132,7 +139,7 @@ class Security:
             choice = int(choice)
             return choice
         else:
-            print("Input Not valid")
+            return f"Input Not valid"
     
 def main():
     flashcard = FlashCard() # added the instance 
@@ -173,23 +180,38 @@ def main():
         
         if checked_Num == 1: # adding the topics and questions
             
-            topic = input("Enter the topic you want to add :")  #gets the topic 
+            topic = input("Enter the topic you want to add :")  # gets the topic 
+            
+            questionlist = []
             
             while True:
-                print("\nPress enter to quit.")
-                question = input("Enter the question you want to add \nNew question :  ") 
+                question = input("\nEnter the question you want to add \nNew question :  ") 
+                
+                # input validation
+                
                 if question == "":
-                    if questionlist == []: # check if the list is empty before passing the topic to the function
-                        print("\nYour topic can't be saved \nReason - No questions under the topic")
-                        continue 
+                    print("Question cannot be empty")
+                else:
+                    questionlist.append(question)
+                
+                # ask if the user wants to add another question 
+                
+                ask = input(f"Do you wish to add another question to the topic {topic} y/n : ").capitalize()
+                
+                if ask == "Y":
+                    continue
+                elif ask == "N":
+                    # check if the list is empty before passing it to the dic
+                    if len(questionlist) == 0:
+                        print(f"No Questions were added under the `{topic}`")
                     else:
                         flashcard.addstuff(topic,questionlist)
-                        print(f"Questions saved successfully under the Topic - '{topic}'")
-                        questionlist.clear() # Clear the list for repeatable use 
+                        print("sucessfully saved !")
                     break
                 else:
-                    questionlist.append(question) 
-            
+                    print("Invalid input")
+                    continue
+
         elif checked_Num == 2: # look at questions
             
             numList = [] # list to store numbers from the loop
@@ -278,13 +300,25 @@ def main():
                 
             print("\n1.Login")
             print("2.Register as a new user")
+            
+            while True:    
+                adChoice = input("\nEnter your option : ")
                 
-            adChoice = input("\nEnter your option : ")
+                checkedAdchoice = lock.numcheck(adChoice)  # output = int or str
+                
+                ############################################## ISSUE ############################################################
+                
+                try:
+                    if checkedAdchoice < 3:
+                        break
+                    else:
+                        print("Enter a valid number")
+                        
+                except TypeError:
+                    print("Enter a number")
+                    continue
             
-            checkedAdchoice = lock.numcheck(adChoice)
             
-            if checkedAdchoice >= 3:
-                print("Choice not valid! ")
             
             if checkedAdchoice == 1: # login
                 while login.attempts != 4:
@@ -319,9 +353,7 @@ def main():
                         
                         checkeddelChoice = lock.numcheck(delChoice)
                         
-                        if checkeddelChoice > 3:
-                            print("Enter a Valid Input !")
-                            continue
+                        print(type(checkeddelChoice))
                         
                         print()
                         
@@ -329,11 +361,11 @@ def main():
                             
                             delTopicList = [] # topics from the dic
                             
-                            for i, topics in enumerate(flashcard.flashcardDic.keys(),1):
+                            for i, topics in enumerate(flashcard.flashcardDic.keys(),1): # display the topics 
                                 delTopicList.append(topics)
                                 print(f"{i}.{topics}")
                             
-                            delTopicChoice = input("Enter the number of topic you want to delete : ")
+                            delTopicChoice = input("Enter the number of topic you want to delete : ") # get the choice from a user 
 
                             CheckeddelTopicChoice = lock.numcheck(delTopicChoice)
                             
@@ -346,13 +378,53 @@ def main():
                             result = flashcard.delTopic(choosenDelTopic)
                             
                             print(result)
+                            delTopicList.clear() #clear the list 
                             break
+                        
                         elif checkeddelChoice == 2:
                             # add the delete question thing 
-                            pass
                             
+                            delTopicList = [] # topics from the dic
                             
-            if checkedAdchoice == 2:
+                            for i, topics in enumerate(flashcard.flashcardDic.keys(),1): # display the topics 
+                                delTopicList.append(topics)
+                                print(f"{i}.{topics}")
+                            
+                            delQChoice = input("Enter the number of choice you want to select : ")
+                            
+                            checkeddelQChoice = lock.numcheck(delQChoice) # input check
+                            
+                            # pass in the topic under the choosen index 
+                            
+                            questions1 = flashcard.delChoice(delTopicList[checkeddelQChoice-1]) # get the list of the choosen topic
+                            
+                            print()
+                            
+                            for i,delq in enumerate(questions1,1): # print the questions to the user 
+                                print(f"{i}.{delq}")
+                                
+                            delQChoice = input("\nChoose the number of question you want to delete : ") # get the user input 
+                             
+                            checkeddelQChoice = lock.numcheck(delQChoice) # input validation
+                            
+                            if checkeddelQChoice > len(flashcard.questions): # check if the input is within the range of questions
+                                print("Choice invalid")
+                            
+                            print(f"\nLegnth of the list {len(flashcard.questions)}") 
+                            
+                            # acess the questions in flashcard and delete the one according to the input
+                            
+                            # append it again underthe topic
+                            
+                            del flashcard.questions[checkeddelQChoice-1] 
+                            
+                            print(f"\n`{flashcard.questions[checkeddelQChoice-1]}` deleted from the topic {delTopicList[checkeddelQChoice-1]}")
+                          
+                            # print(flashcard.delChoice(checkeddelQChoice))
+                            
+                            flashcard.questions.clear()
+
+            elif checkedAdchoice == 2:
                 # get the new username
                 # get the new password 
                 # add them to the login database 
