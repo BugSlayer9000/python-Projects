@@ -328,11 +328,16 @@ def main():
                         print("\nYou must enter a username !") # Empty input check 
                         continue
                     
-                    password = input("Enter your password : ")
-                    
-                    if password == "":
-                        print("\nYou must enter a password !") # Empty input check 
-                        continue
+                    if username != "":
+                        password = input("Enter your password : ")
+                        
+                        if password == "":
+                            print("\nYou must enter a password !") # Empty input check 
+                            login.attempts += 1
+                            print(f"-------you have {4-login.attempts} attempts left-------")
+                            continue
+                        else:
+                            pass
                     
                     response, attempts, loginCheck = login.loginCheck(username,password) # pass the username and password to the login data and get back the validation as a tuple
                     
@@ -344,6 +349,8 @@ def main():
                                 # delete the topic 
                             # choice questions
                                 # show the questions and let the user choose one
+                    
+                    
                     
                     if loginCheck == True:
                         print("\n1.Topics")
@@ -423,6 +430,12 @@ def main():
                             # print(flashcard.delChoice(checkeddelQChoice))
                             
                             flashcard.questions.clear()
+
+                    elif loginCheck == False:
+                        print(f"{response}")
+                        print(f"-------you have {4-login.attempts} attempts left-------")
+                        
+                   
 
             elif checkedAdchoice == 2:
                 # get the new username
