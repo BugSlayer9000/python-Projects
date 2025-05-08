@@ -50,7 +50,7 @@ class FlashCard:
     def __init__(self):
         self.flashcardDic = {
     "Science": ["What is an atom?", "Define life"],
-    "Math": ["What is 2+2?", "Define a prime number","pakaya","ponny","kariya","huththto"]
+    "Math": ["What is 2+2?", "Define a prime number","What is a Float?","Round 2.345 to the nearest whole number","how many whole numbers are there","what is 1+1 "]
     }  # examples to work with#
         self.questions = []
         
