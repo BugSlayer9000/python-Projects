@@ -117,6 +117,8 @@ class LoginData:
         self.userData = {"samod":"samod1"}
         self.attempts = 0
         self.login = False
+
+            
         
     def loginCheck(self,username,password):
         

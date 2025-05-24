@@ -6,5 +6,13 @@
         "Round 2.345 to the nearest whole number",
         "how many whole numbers are there",
         "what is 1+1 "
+    ],
+    "science ": [
+        "what is an atom",
+        "what is science"
+    ],
+    "politics ": [
+        "who is the prime minister in UK?",
+        "State the declaraion of indipendance "
     ]
 }
