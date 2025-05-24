@@ -45,15 +45,21 @@
 #                         "Define life"]}   # Example of how the topic and questions should be 
 
 import random 
+import json
 
 class FlashCard:
     def __init__(self):
-        self.flashcardDic = {
-    "Science": ["What is an atom?", "Define life"],
-    "Math": ["What is 2+2?", "Define a prime number","What is a Float?","Round 2.345 to the nearest whole number","how many whole numbers are there","what is 1+1 "]
-    }  # examples to work with#
+        self.flashcardDic = {}  
         self.questions = []
-        
+        self.loadfiles()
+    
+    def loadfiles(self):
+        try:
+            with open(r"Flashcardapp/Questions.json", "r") as f:
+                self.flashcardDic = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.flashcardDic = {}
+      
     def addstuff(self, topic, questlist): # Get the topic from the input 
         self.flashcardDic[topic] = questlist
         
@@ -100,6 +106,11 @@ class FlashCard:
                 self.questions.append(_)
                 
         return self.questions
+    
+    def saveFiles(self):
+        with open(r"Flashcardapp\Questions.json", "w") as f:
+            json.dump(self.flashcardDic, f, indent=4)
+        return f"Files saved"
    
 class LoginData:
     def __init__(self):
@@ -140,7 +151,11 @@ class Security:
             return choice
         else:
             return f"Input Not valid"
+
+
+
     
+ 
 def main():
     flashcard = FlashCard() # added the instance 
     
@@ -300,6 +315,7 @@ def main():
                 
             print("\n1.Login")
             print("2.Register as a new user")
+            print("3.Manage Files")
             
             while True:    
                 adChoice = input("\nEnter your option : ")
@@ -309,7 +325,7 @@ def main():
                 ############################################## ISSUE ############################################################
                 
                 try:
-                    if checkedAdchoice < 3:
+                    if checkedAdchoice < 4:
                         break
                     else:
                         print("Enter a valid number")
@@ -457,7 +473,13 @@ def main():
                 newLogin = login.addNewLogin(newUser,newPw)
                 
                 print(newLogin)
-                  
+
+            elif checkedAdchoice == 3:
+                print("\n-----------File Maneger-----------")
+                print(flashcard.saveFiles())
+                
+                
+                
         elif checked_Num == 5:
             print(f"Goodbye ! ")
             break
