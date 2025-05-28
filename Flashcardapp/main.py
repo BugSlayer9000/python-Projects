@@ -51,14 +51,6 @@ class FlashCard:
     def __init__(self):
         self.flashcardDic = {}  
         self.questions = []
-        self.loadfiles()
-    
-    def loadfiles(self):
-        try:
-            with open(r"Flashcardapp/Questions.json", "r") as f:
-                self.flashcardDic = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            self.flashcardDic = {}
       
     def addstuff(self, topic, questlist): # Get the topic from the input 
         self.flashcardDic[topic] = questlist
@@ -106,11 +98,28 @@ class FlashCard:
                 self.questions.append(_)
                 
         return self.questions
+
+class Filehandling:
+    def __init__(self,FlashCard_instance):
+        self.flashcard = FlashCard_instance
+        self.fileLocation = r"Flashcardapp/Questions.json"
+        self.saveFileLocation = r"Flashcardapp\Questions.json"
+        self.loadFile()
+        
+    def loadFile(self):
+        try:
+            with open(self.fileLocation, "r") as f:
+                self.flashcard.flashcardDic = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.flashcard.flashcardDic = {}
+            with open(self.fileLocation, "w") as f:
+                json.dump(self.flashcard.flashcardDic, f, indent=4)
     
-    def saveFiles(self):
-        with open(r"Flashcardapp\Questions.json", "w") as f:
-            json.dump(self.flashcardDic, f, indent=4)
+    def saveFile(self):
+        with open(self.saveFileLocation, "w") as f:
+            json.dump(self.flashcard.flashcardDic, f, indent=4)
         return f"Files saved"
+    
    
 class LoginData:
     def __init__(self):
@@ -164,6 +173,8 @@ def main():
     lock = Security() 
     
     login = LoginData()
+    
+    filehandling = Filehandling(flashcard)
     
     is_running = True
     
@@ -478,7 +489,7 @@ def main():
 
             elif checkedAdchoice == 3:
                 print("\n-----------File Maneger-----------")
-                print(flashcard.saveFiles())
+                filehandling.saveFile()
                 
                 
                 

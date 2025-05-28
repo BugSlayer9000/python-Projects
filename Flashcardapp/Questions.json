@@ -1,18 +1,11 @@
 {
-    "Math": [
-        "What is 2+2?",
-        "Define a prime number",
-        "What is a Float?",
-        "Round 2.345 to the nearest whole number",
-        "how many whole numbers are there",
-        "what is 1+1 "
-    ],
-    "science ": [
+    "science": [
         "what is an atom",
-        "what is science"
+        "what is life",
+        "define a cell"
     ],
-    "politics ": [
-        "who is the prime minister in UK?",
-        "State the declaraion of indipendance "
+    "math": [
+        "define a whole number ",
+        "what is math"
     ]
 }
