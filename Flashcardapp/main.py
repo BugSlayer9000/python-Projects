@@ -119,13 +119,12 @@ class Filehandling:
         with open(self.saveFileLocation, "w") as f:
             json.dump(self.flashcard.flashcardDic, f, indent=4)
         return f"Files saved"
-    
-   
+      
 class LoginData:
     def __init__(self):
-        self.userData = {"samod":"samod1"}
+        self.userData = {}
         self.attempts = 0
-        self.login = False
+        self.loginStatus = False
 
             
         
@@ -133,23 +132,38 @@ class LoginData:
         
         if self.attempts <= 3:
             if username in self.userData:
-                if password in self.userData[username]: 
-                    self.login = True
-                    return f"Access sucessful !",self.attempts,self.login
+                if self.userData[username] == password :
+                    self.loginStatus = True
+                    return f"Access sucessful !",self.attempts,self.loginStatus
                 else:
                     self.attempts += 1
-                    return f"Wrong Password !", self.attempts, self.login
+                    return f"Wrong Password !", self.attempts, self.loginStatus
             else:
                 self.attempts += 1
-                return f"Wrong Username and password !", self.attempts, self.login
+                return f"Wrong Username and password !", self.attempts, self.loginStatus
                 
         else:
-            return f"You have no attempts left", self.attempts, self.login
+            return f"You have no attempts left", self.attempts, self.loginStatus
+        
+       
     
     def addNewLogin(self, newUser, newPw):
         self.userData[newUser] = newPw
         return f"New User added \nUsername - {newUser} \nPassword - {newPw}"
-           
+
+class LoginFileHandling:
+    def __init__(self,LoginDataInstance):
+        self.LoginData = LoginDataInstance
+        self.loginFileLocation = r"Flashcardapp\loginData.json"
+        self.loginFileLoad()
+    
+    def loginFileLoad(self):
+        try:
+            with open(self.loginFileLocation, "r") as f:
+                self.LoginData.userData = json.load(f)
+        except FileNotFoundError:
+            self.LoginData.userData = {}
+                  
 class Security:
     def __init__(self):
         # self.password = password    # password and the username is for later options 
@@ -175,6 +189,8 @@ def main():
     login = LoginData()
     
     filehandling = Filehandling(flashcard)
+    
+    loginFileHandling = LoginFileHandling(login)
     
     is_running = True
     
@@ -350,120 +366,132 @@ def main():
             
             
             if checkedAdchoice == 1: # login
-                while login.attempts != 4:
-                    username = input("Enter your username : ") # ask for the username
-                    
-                    if username == "":
-                        print("\nYou must enter a username !") # Empty input check 
-                        continue
-                    
-                    if username != "":
-                        password = input("Enter your password : ")
+                
+                if len(login.userData) != 0:
+                    while login.attempts != 4:
+                        username = input("Enter your username : ") # ask for the username
                         
-                        if password == "":
-                            print("\nYou must enter a password !") # Empty input check 
-                            login.attempts += 1
-                            print(f"-------you have {4-login.attempts} attempts left-------")
+                        if username == "":
+                            print("\nYou must enter a username !") # Empty input check 
                             continue
-                        else:
-                            pass
-                    
-                    response, attempts, loginCheck = login.loginCheck(username,password) # pass the username and password to the login data and get back the validation as a tuple
-                    
-                    # response = Access sucessful ! , attempts < 3 , loginCheck = True
-                        # ask the user delete topic or questions 
-                            # show topics
-                            # let the user choose one 
-                            # choice topic 
-                                # delete the topic 
-                            # choice questions
-                                # show the questions and let the user choose one
-                    
-                    
-                    
-                    if loginCheck == True:
-                        print("\n1.Topics")
-                        print("2.Questions")
                         
-                        delChoice = input("\nDo want to delete or topics : ")
-                        
-                        checkeddelChoice = lock.numcheck(delChoice)
-                        
-                        print(type(checkeddelChoice))
-                        
-                        print()
-                        
-                        if checkeddelChoice == 1: # show the topics 
+                        if username != "":
+                            password = input("Enter your password : ")
                             
-                            delTopicList = [] # topics from the dic
-                            
-                            for i, topics in enumerate(flashcard.flashcardDic.keys(),1): # display the topics 
-                                delTopicList.append(topics)
-                                print(f"{i}.{topics}")
-                            
-                            delTopicChoice = input("Enter the number of topic you want to delete : ") # get the choice from a user 
-
-                            CheckeddelTopicChoice = lock.numcheck(delTopicChoice)
-                            
-                            if CheckeddelTopicChoice > len(delTopicList): # input check
-                                print("Invalid input")
+                            if password == "":
+                                print("\nYou must enter a password !") # Empty input check 
+                                login.attempts += 1
+                                print(f"-------you have {4-login.attempts} attempts left-------")
                                 continue
-                            
-                            choosenDelTopic = delTopicList[CheckeddelTopicChoice-1]
-                            
-                            result = flashcard.delTopic(choosenDelTopic)
-                            
-                            print(result)
-                            delTopicList.clear() #clear the list 
-                            break
+                            else:
+                                pass
                         
-                        elif checkeddelChoice == 2:
-                            # add the delete question thing 
+                        response, attempts, loginCheck = login.loginCheck(username,password) # pass the username and password to the login data and get back the validation as a tuple
+                        
+                        # response = Access sucessful ! , attempts < 3 , loginCheck = True
+                            # ask the user delete topic or questions 
+                                # show topics
+                                # let the user choose one 
+                                # choice topic 
+                                    # delete the topic 
+                                # choice questions
+                                    # show the questions and let the user choose one
+                        
+                        
+                        
+                        
+                        if loginCheck == True:
+                            print("\n1.Topics")
+                            print("2.Questions")
                             
-                            delTopicList = [] # topics from the dic
                             
-                            for i, topics in enumerate(flashcard.flashcardDic.keys(),1): # display the topics 
-                                delTopicList.append(topics)
-                                print(f"{i}.{topics}")
                             
-                            delQChoice = input("Enter the number of choice you want to select : ")
+                            delChoice = input("\nDo want to delete or topics enter to quit : ")
                             
-                            checkeddelQChoice = lock.numcheck(delQChoice) # input check
+                            checkeddelChoice = lock.numcheck(delChoice)
                             
-                            # pass in the topic under the choosen index 
-                            
-                            questions1 = flashcard.delChoice(delTopicList[checkeddelQChoice-1]) # get the list of the choosen topic
+                            print(type(checkeddelChoice))
                             
                             print()
                             
-                            for i,delq in enumerate(questions1,1): # print the questions to the user 
-                                print(f"{i}.{delq}")
+                            if checkeddelChoice == 1: # show the topics 
                                 
-                            delQChoice = input("\nChoose the number of question you want to delete : ") # get the user input 
-                             
-                            checkeddelQChoice = lock.numcheck(delQChoice) # input validation
-                            
-                            if checkeddelQChoice > len(flashcard.questions): # check if the input is within the range of questions
-                                print("Choice invalid")
-                            
-                            print(f"\nLegnth of the list {len(flashcard.questions)}") 
-                            
-                            # acess the questions in flashcard and delete the one according to the input
-                            
-                            # append it again underthe topic
-                            
-                            del flashcard.questions[checkeddelQChoice-1] 
-                            
-                            print(f"\n`{flashcard.questions[checkeddelQChoice-1]}` deleted from the topic {delTopicList[checkeddelQChoice-1]}")
-                          
-                            # print(flashcard.delChoice(checkeddelQChoice))
-                            
-                            flashcard.questions.clear()
+                                delTopicList = [] # topics from the dic
+                                
+                                for i, topics in enumerate(flashcard.flashcardDic.keys(),1): # display the topics 
+                                    delTopicList.append(topics)
+                                    print(f"{i}.{topics}")
+                                
+                                delTopicChoice = input("Enter the number of topic you want to delete : ") # get the choice from a user 
 
-                    elif loginCheck == False:
-                        print(f"{response}")
-                        print(f"-------you have {4-login.attempts} attempts left-------")
-                        
+                                CheckeddelTopicChoice = lock.numcheck(delTopicChoice)
+                                
+                                if CheckeddelTopicChoice > len(delTopicList): # input check
+                                    print("Invalid input")
+                                    continue
+                                
+                                choosenDelTopic = delTopicList[CheckeddelTopicChoice-1]
+                                
+                                result = flashcard.delTopic(choosenDelTopic)
+                                
+                                print(result)
+                                delTopicList.clear() #clear the list 
+                                break
+                            
+                            elif checkeddelChoice == 2:
+                                # add the delete question thing 
+                                
+                                delTopicList = [] # topics from the dic
+                                
+                                for i, topics in enumerate(flashcard.flashcardDic.keys(),1): # display the topics 
+                                    delTopicList.append(topics)
+                                    print(f"{i}.{topics}")
+                                
+                                delQChoice = input("Enter the number of choice you want to select : ")
+                                
+                                checkeddelQChoice = lock.numcheck(delQChoice) # input check
+                                
+                                # pass in the topic under the choosen index 
+                                
+                                questions1 = flashcard.delChoice(delTopicList[checkeddelQChoice-1]) # get the list of the choosen topic
+                                
+                                print()
+                                
+                                for i,delq in enumerate(questions1,1): # print the questions to the user 
+                                    print(f"{i}.{delq}")
+                                    
+                                delQChoice = input("\nChoose the number of question you want to delete : ") # get the user input 
+                                
+                                checkeddelQChoice = lock.numcheck(delQChoice) # input validation
+                                
+                                if checkeddelQChoice > len(flashcard.questions): # check if the input is within the range of questions
+                                    print("Choice invalid")
+                                
+                                print(f"\nLegnth of the list {len(flashcard.questions)}") 
+                                
+                                # acess the questions in flashcard and delete the one according to the input
+                                
+                                # append it again underthe topic
+                                
+                                del flashcard.questions[checkeddelQChoice-1] 
+                                
+                                print(f"\n`{flashcard.questions[checkeddelQChoice-1]}` deleted from the topic {delTopicList[checkeddelQChoice-1]}")
+                            
+                                # print(flashcard.delChoice(checkeddelQChoice))
+                                
+                                flashcard.questions.clear()
+
+                            elif delChoice == "":
+                                loginCheck == False
+                        elif loginCheck == False:
+                            print(f"{response}")
+                            print(f"-------you have {4-login.attempts} attempts left-------")
+                            
+                        login.loginStatus = False
+                else:
+                    print("\nNo login data found. Please check the login JSON file")
+                    
+                    
                    
 
             elif checkedAdchoice == 2:
