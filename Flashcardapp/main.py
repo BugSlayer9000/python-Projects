@@ -163,6 +163,14 @@ class LoginFileHandling:
                 self.LoginData.userData = json.load(f)
         except FileNotFoundError:
             self.LoginData.userData = {}
+    
+    def savefile(self):
+        try:
+            with open(self.loginFileLocation, "w") as f:
+                json.dump(self.LoginData.userData, f, indent=4)
+                return f"\nData saved !"
+        except FileNotFoundError:
+            return f"PW json file not found"
                   
 class Security:
     def __init__(self):
@@ -512,6 +520,8 @@ def main():
                     continue
                 
                 newLogin = login.addNewLogin(newUser,newPw)
+                
+                print(loginFileHandling.savefile())
                 
                 print(newLogin)
 
