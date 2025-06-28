@@ -112,11 +112,11 @@ class game_score:
  
     def show_score(self):
         print("It is not implemented to the program yet ! ")
-    
-game = game_score()  
+
+game = game_score()
    
 def main():
-    
+        
     while True:
         print("---------Rock paper scissor game by samod---------")
         
