@@ -132,9 +132,6 @@ class LoginFileHandling:
                   
 class Security:
     def __init__(self):
-        # self.password = password    # password and the username is for later options 
-        # self.username = username
-        # self.choice = choice        # this one is for num validation
         pass
     def numcheck(self,choice):
         if choice.isdigit():
@@ -143,7 +140,8 @@ class Security:
         else:
             return f"Input Not valid"
 
-
+class InputHandling():
+    pass
 
     
  
