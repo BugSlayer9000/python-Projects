@@ -55,7 +55,7 @@ class GameEngine:
         
         score = input_handling(input("Enter the Score for this round : "), arg1=10)
         
-        GameScore.set_goal_score(score)
+        self.game_score.set_goal_score(score) # Fix 
         
         self.run_game(self.player_names[0], self.player_names[1], self.is_computer)
         
@@ -134,7 +134,7 @@ class GameScore:
             
         elif self.player1_score <= self.goal_score or self.player2_score <= self.goal_score:
             
-            self.game_engine.run_game(self.game_engine.player_names[0], self.player2_score[1], self.game_engine.is_computer)
+            self.game_engine.run_game(self.game_engine.player_names[0], self.game_engine.player_names[1], self.game_engine.is_computer)
          
                 
     def show_score(self, player_name ):
